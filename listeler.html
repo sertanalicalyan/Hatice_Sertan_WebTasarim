@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelime Ezberleme - Listelerim</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+    <header>
+        <div class="header-sol">
+            <button id="menu-buton" class="menu-buton">☰</button>
+            <h1><a href="./index.html" class="logo-link">Kelime Ezberleme</a></h1>
+        </div>
+        
+        <nav id="yan-menu" class="yan-menu">
+            <div class="menu-baslik">Kelime Ezberleme</div>
+            
+            <a href="./index.html">Ana Sayfa</a>
+            <a href="./listeler.html">Listelerim</a>
+            <a href="./kartlar.html">Kart Yönetimi</a>
+            <a href="./calis.html">Çalışma Modu</a>
+            <a href="./ilerleme.html">İlerleme Takibi</a>
+        </nav>
+    </header>
+
+    <main>
+        <section id="listeler-yonetimi">
+            <h2>Listelerim</h2>
+
+            <div class="kontrol-alani">
+                <div class="arama-grup">
+                    <label for="liste-arama">Listelerde Ara:</label>
+                    <input type="text" id="liste-arama" placeholder="Liste adı veya dil ara...">
+                </div>
+                <div class="filtre-grup">
+                    <label for="kategori-filtre">Kategoriye Göre Filtrele:</label>
+                    <select id="kategori-filtre">
+                        <option value="hepsi">Tüm Kategoriler</option>
+                        <option value="dil">Dil Öğrenimi</option>
+                        <option value="yazilim">Yazılım / Bilim</option>
+                        <option value="genel">Genel Kültür</option>
+                        <option value="diger">Diğer</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="listeler-izgara-sistemi">
+                <div class="form-kutu">
+                    <h3>Yeni Liste Oluştur</h3>
+                    <form id="yeni-liste-formu">
+                        <div class="form-grup">
+                            <label for="liste-adi">Liste Adı:</label>
+                            <input type="text" id="liste-adi" required placeholder="Örn: İngilizce İleri Seviye">
+                        </div>
+                        <div class="form-grup">
+                            <label for="liste-dili">Dil / Konu:</label>
+                            <input type="text" id="liste-dili" required placeholder="Örn: İngilizce, İspanyolca, Terimler">
+                        </div>
+                        <div class="form-grup">
+                            <label for="liste-kategori">Kategori:</label>
+                            <select id="liste-kategori" required>
+                                <option value="dil">Dil Öğrenimi</option>
+                                <option value="yazilim">Yazılım / Bilim</option>
+                                <option value="genel">Genel Kültür</option>
+                                <option value="diger">Diğer</option>
+                            </select>
+                        </div>
+                        <div class="form-grup">
+                            <label for="liste-renk">Tema Rengi:</label>
+                            <input type="color" id="liste-renk" value="#3498db">
+                        </div>
+                        <div class="form-grup">
+                            <label for="liste-emoji">İkon (Emoji):</label>
+                            <input type="text" id="liste-emoji" placeholder="Örn: 🇬🇧, 💻, 📚" maxlength="2" required>
+                        </div>
+                        <button type="submit" class="btn-ekle">Liste Oluştur</button>
+                    </form>
+                </div>
+
+                <div class="listeler-goruntuleme">
+                    <h3>Mevcut Kelime Listeleriniz</h3>
+                    <div id="listeler-konteyner" class="listeler-izgarasi">
+                        <p class="bos-uyari">Henüz bir liste oluşturmadınız veya listeler yükleniyor...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>2026 - Web Tasarım Final Projesi</p>
+    </footer>
+
+    <script src="./script.js" defer></script>
+</body>
+</html>

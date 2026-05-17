@@ -1,0 +1,372 @@
+/* ==========================================================================
+   1. CSS DEĞİŞKENLERİ (Renk Paleti ve Tema Ayarları) - Kılavuz Zorunluluğu
+   ========================================================================== */
+:root {
+    /* Renk Paleti (Modern, Şık ve Zengin bir görünüm için) */
+    --renk-birincil: #2563eb;       /* Canlı bir mavi (Aksiyon rengi) */
+    --renk-ikincil: #1e293b;        /* Koyu lacivert/gri (Başlıklar ve Menü için) */
+    --renk-arkaplan: #f8fafc;       /* Çok uçuk bir gri/beyaz (Göz yormaz) */
+    --renk-kart: #ffffff;           /* Kart ve kutu arkaplanları */
+    --renk-metin: #334155;          /* Okunabilir koyu gri */
+    --renk-metin-acik: #64748b;     /* Alt başlıklar ve açıklamalar için açık gri */
+    
+    /* Durum Renkleri */
+    --renk-basari: #10b981;         /* Doğru butonları ve ilerleme için zümrüt yeşili */
+    --renk-hata: #ef4444;           /* Yanlış butonları ve silme işlemleri için kırmızı */
+
+    /* Gölgeler ve Yuvarlatmalar (Premium Hissiyat İçin) */
+    --golge-hafif: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    --golge-belirgin: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --radius-kucuk: 8px;
+    --radius-buyuk: 16px;
+    
+    /* Font ve Geçiş (Animasyon) Ayarları */
+    --font-ana: 'Inter', system-ui, -apple-system, sans-serif;
+    --gecis-hizi: 0.3s ease;
+}
+
+/* ==========================================================================
+   2. TEMEL SIFIRLAMA (Reset) VE SAYFA AYARLARI
+   ========================================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-ana);
+    background-color: var(--renk-arkaplan);
+    color: var(--renk-metin);
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ==========================================================================
+   3. ÜST MENÜ VE YAN MENÜ (Header & Sidebar)
+   ========================================================================== */
+header {
+    background-color: var(--renk-ikincil);
+    color: white;
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    box-shadow: var(--golge-belirgin);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-sol {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+header h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+/* Hamburger Butonu Tasarımı */
+.menu-buton {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 2rem;
+    cursor: pointer;
+    padding: 0;
+    box-shadow: none; /* Ana buton gölgesini ezdik */
+}
+
+.menu-buton:hover {
+    background: none;
+    box-shadow: none;
+    transform: scale(1.1); /* Üzerine gelince sadece hafif büyür */
+    color: var(--renk-birincil);
+}
+
+/* Yan Menü (Güncellenmiş Hali) */
+.yan-menu {
+    position: fixed;
+    top: 0;
+    left: -300px;
+    width: 280px;
+    height: 100vh;
+    background-color: #0f172a;
+    display: flex;
+    flex-direction: column;
+    padding-top: 0; /* DEĞİŞİKLİK: Başlığın yukarıya tam oturması için 0 yaptık */
+    transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--golge-belirgin);
+    z-index: 99;
+}
+
+/* JS ile 'acik' class'ı eklendiğinde menü ekrana girecek */
+.yan-menu.acik {
+    left: 0; 
+}
+
+.yan-menu a {
+    color: #cbd5e1;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1.1rem;
+    padding: 1.2rem 2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all var(--gecis-hizi);
+}
+
+.yan-menu a:hover {
+    color: white;
+    background-color: rgba(255, 255, 255, 0.1);
+    padding-left: 2.5rem; /* Üzerine gelince link hafif sağa kayar, premium bir his verir */
+    border-left: 4px solid var(--renk-birincil);
+}
+
+/* ==========================================================================
+   4. ANA İÇERİK ALANI (Main) VE BUTONLAR
+   ========================================================================== */
+main {
+    flex: 1; /* Footer'ı en alta itmek için */
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 3rem 2rem;
+}
+
+/* ==========================================================================
+   5. BUTON DÜZELTMELERİ (Orantılı ve Şık Görünüm İçin)
+   ========================================================================== */
+/* Butonların kapsayıcı alan kadar uzamasını engeller ve kendi boyutlarında kalmalarını sağlar */
+button {
+    width: fit-content; 
+    align-self: flex-start;
+}
+
+/* Farklı Buton Tipleri */
+.btn-ana {
+    background-color: var(--renk-birincil);
+    padding: 0.8rem 2rem;
+    border-radius: var(--radius-buyuk); /* Daha yuvarlak ve modern hatlar */
+}
+
+.btn-ikincil {
+    background-color: transparent;
+    color: var(--renk-birincil);
+    border: 2px solid var(--renk-birincil);
+}
+
+.btn-ikincil:hover {
+    background-color: var(--renk-birincil);
+    color: white;
+}
+
+.btn-kucuk {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+    border-radius: var(--radius-kucuk);
+}
+
+/* ==========================================================================
+   6. ANA SAYFA (DASHBOARD) TASARIMI
+   ========================================================================== */
+.dashboard-alani {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+/* Üst İstatistik Kartları */
+.istatistik-izgarasi {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.istatistik-kart {
+    background-color: var(--renk-kart);
+    padding: 1.5rem;
+    border-radius: var(--radius-buyuk);
+    box-shadow: var(--golge-hafif);
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    transition: transform var(--gecis-hizi);
+}
+
+.istatistik-kart:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--golge-belirgin);
+}
+
+.ikon-kutusu {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.8rem;
+}
+
+.ates-ikonu { background-color: #fff7ed; color: #f97316; }
+.kelime-ikonu { background-color: #eff6ff; color: #3b82f6; }
+.hedef-ikonu { background-color: #f0fdf4; color: #22c55e; }
+
+.istatistik-bilgi h4 {
+    color: var(--renk-metin-acik);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.istatistik-bilgi .sayi {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--renk-ikincil);
+}
+
+/* Mini Progress Bar (Hedef Kartı İçin) */
+.mini-progress-arka {
+    width: 100%;
+    height: 6px;
+    background-color: #e2e8f0;
+    border-radius: 10px;
+    margin-top: 0.5rem;
+}
+
+.mini-progress-dolu {
+    height: 100%;
+    background-color: var(--renk-basari);
+    border-radius: 10px;
+}
+
+/* Alt Bölüm: Son Listeler ve Hızlı Başla */
+.dashboard-alt-izgara {
+    display: grid;
+    grid-template-columns: 2fr 1fr; /* Sol taraf daha geniş, sağ taraf daha dar */
+    gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .dashboard-alt-izgara {
+        grid-template-columns: 1fr; /* Mobilde alt alta dizer */
+    }
+}
+
+.son-listeler-kutusu, .hizli-basla-kutusu {
+    background-color: var(--renk-kart);
+    padding: 2rem;
+    border-radius: var(--radius-buyuk);
+    box-shadow: var(--golge-hafif);
+}
+
+.son-listeler-kutusu h3, .hizli-basla-kutusu h3 {
+    margin-bottom: 1.5rem;
+    color: var(--renk-ikincil);
+}
+
+.liste-satiri {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.liste-satiri:last-child {
+    border-bottom: none;
+}
+
+.liste-ikonu {
+    font-size: 2rem;
+    margin-right: 1rem;
+}
+
+.liste-detay {
+    flex: 1; /* Ortadaki yazının alanı doldurmasını sağlar, butonu sağa iter */
+}
+
+.liste-detay h4 {
+    font-size: 1.1rem;
+    color: var(--renk-metin);
+}
+
+.liste-detay p {
+    font-size: 0.85rem;
+    color: var(--renk-metin-acik);
+    margin-top: 0.2rem;
+}
+
+.hizli-basla-kutusu {
+    background: linear-gradient(135deg, #2563eb, #1e40af);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.hizli-basla-kutusu h3 {
+    color: white;
+}
+
+.hizli-basla-kutusu p {
+    margin-bottom: 1.5rem;
+    color: #cbd5e1;
+}
+
+.hizli-basla-kutusu .btn-ana {
+    background-color: white;
+    color: #1e40af;
+}
+
+.hizli-basla-kutusu .btn-ana:hover {
+    background-color: #f8fafc;
+    transform: translateY(-2px);
+}
+
+button:hover {
+    transform: translateY(-2px); /* Üzerine gelince hafifçe yukarı kalkar */
+    box-shadow: var(--golge-belirgin);
+    background-color: #1d4ed8; /* Biraz daha koyu mavi */
+}
+
+/* Footer (Alt Bilgi) */
+footer {
+    text-align: center;
+    padding: 1.5rem;
+    color: var(--renk-metin-acik);
+    font-size: 0.875rem;
+    border-top: 1px solid #e2e8f0;
+}
+
+/* ==========================================================================
+   YENİ EKLEMELER: Logo Linki ve Yan Menü Başlığı
+   ========================================================================== */
+
+/* Sol üstteki Kelime Ezberleme yazısının link tasarımını düzeltiyoruz */
+.logo-link {
+    color: white;
+    text-decoration: none; /* Altındaki çizgiyi kaldırır */
+    transition: color var(--gecis-hizi);
+}
+
+.logo-link:hover {
+    color: #cbd5e1; /* Üzerine gelince çok hafif grileşir, tıklanabilir olduğunu belli eder */
+}
+
+/* Yan menü açıldığında sol üst köşede duracak premium başlık alanı */
+.menu-baslik {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: white;
+    padding: 1.5rem 2rem;
+    background-color: var(--renk-ikincil); /* Header ile aynı koyu ton */
+    border-bottom: 3px solid var(--renk-birincil); /* Altına şık mavi bir çizgi çeker */
+    margin-bottom: 1rem;
+    letter-spacing: -0.5px;
+}

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelime Ezberleme - Kart Yönetimi</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+    <header>
+        <div class="header-sol">
+            <button id="menu-buton" class="menu-buton">☰</button>
+            <h1><a href="./index.html" class="logo-link">Kelime Ezberleme</a></h1>
+        </div>
+        
+        <nav id="yan-menu" class="yan-menu">
+            <div class="menu-baslik">Kelime Ezberleme</div>
+            
+            <a href="./index.html">Ana Sayfa</a>
+            <a href="./listeler.html">Listelerim</a>
+            <a href="./kartlar.html">Kart Yönetimi</a>
+            <a href="./calis.html">Çalışma Modu</a>
+            <a href="./ilerleme.html">İlerleme Takibi</a>
+        </nav>
+    </header>
+
+    <main>
+        <section id="kart-yonetimi">
+            <h2>Kart Yönetimi</h2>
+            
+            <div class="liste-secim-alani">
+                <label for="aktif-liste-secici">Düzenlenecek Listeyi Seçin:</label>
+                <select id="aktif-liste-secici">
+                    <option value="">-- Bir Liste Seçin --</option>
+                    </select>
+            </div>
+
+            <div class="kart-islemleri-izgara">
+                
+                <div class="form-kutu" id="tekli-ekleme-alani">
+                    <h3>Yeni Kart Ekle</h3>
+                    <form id="yeni-kart-formu">
+                        <div class="form-grup">
+                            <label for="kart-on-yuz">Ön Yüz (Kelime/Kavram):</label>
+                            <input type="text" id="kart-on-yuz" required placeholder="Örn: Book">
+                        </div>
+                        <div class="form-grup">
+                            <label for="kart-arka-yuz">Arka Yüz (Anlamı):</label>
+                            <input type="text" id="kart-arka-yuz" required placeholder="Örn: Kitap">
+                        </div>
+                        <div class="form-grup">
+                            <label for="kart-ornek-cumle">Örnek Cümle (Opsiyonel):</label>
+                            <textarea id="kart-ornek-cumle" placeholder="Örn: I am reading a book."></textarea>
+                        </div>
+                        <button type="submit" class="btn-ekle">Kartı Kaydet</button>
+                    </form>
+                </div>
+
+                <div class="form-kutu" id="toplu-ekleme-alani">
+                    <h3>Toplu Kart Ekle</h3>
+                    <p class="form-aciklama">Her satıra <strong>"kelime; anlam"</strong> formatında yazarak birden fazla kartı aynı anda ekleyebilirsiniz.</p>
+                    <textarea id="toplu-kart-metin" placeholder="Apple; Elma&#10;Chair; Sandalye&#10;Window; Pencere" rows="6"></textarea>
+                    <button id="btn-toplu-ekle" class="btn-ikincil">Toplu Oluştur</button>
+                </div>
+
+            </div>
+
+            <div class="mevcut-kartlar-bolumu">
+                <h3>Sistemdeki Kartlar</h3>
+                <div id="kartlar-listesi-izgara" class="kart-izgarasi">
+                    <p class="bos-uyari">Lütfen kartları görüntülemek için yukarıdan bir liste seçin.</p>
+                </div>
+            </div>
+        </section>
+
+        <div id="duzenle-modal" class="modal-arkaplan gizli">
+            <div class="modal-icerik">
+                <span class="modal-kapat" id="btn-modal-kapat">&times;</span>
+                <h3>Kartı Düzenle</h3>
+                <form id="duzenle-kart-formu">
+                    <input type="hidden" id="duzenle-kart-id">
+                    <div class="form-grup">
+                        <label for="duzenle-on-yuz">Ön Yüz (Kelime):</label>
+                        <input type="text" id="duzenle-on-yuz" required>
+                    </div>
+                    <div class="form-grup">
+                        <label for="duzenle-arka-yuz">Arka Yüz (Anlamı):</label>
+                        <input type="text" id="duzenle-arka-yuz" required>
+                    </div>
+                    <div class="form-grup">
+                        <label for="duzenle-ornek-cumle">Örnek Cümle:</label>
+                        <textarea id="duzenle-ornek-cumle"></textarea>
+                    </div>
+                    <button type="submit" class="btn-guncelle">Değişiklikleri Kaydet</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>2026 - Web Tasarım Final Projesi</p>
+    </footer>
+
+    <script src="./script.js" defer></script>
+</body>
+</html>

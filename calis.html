@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelime Ezberleme - Çalışma Modu</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+    <header>
+        <div class="header-sol">
+            <button id="menu-buton" class="menu-buton">☰</button>
+            <h1><a href="./index.html" class="logo-link">Kelime Ezberleme</a></h1>
+        </div>
+        
+        <nav id="yan-menu" class="yan-menu">
+            <div class="menu-baslik">Kelime Ezberleme</div>
+            
+            <a href="./index.html">Ana Sayfa</a>
+            <a href="./listeler.html">Listelerim</a>
+            <a href="./kartlar.html">Kart Yönetimi</a>
+            <a href="./calis.html">Çalışma Modu</a>
+            <a href="./ilerleme.html">İlerleme Takibi</a>
+        </nav>
+    </header>
+
+    <main>
+        <section id="calisma-alani">
+            <h2>Çalışma Modu</h2>
+            
+            <div class="calisma-ayarlari">
+                <select id="mod-secici">
+                    <option value="sirali">Sıralı</option>
+                    <option value="rastgele">Rastgele</option>
+                    <option value="yanlislar">Yalnızca Yanlışlar</option>
+                </select>
+                <div class="ilerleme-konteyner">
+                    <div id="ilerleme-cubugu"></div>
+                </div>
+            </div>
+
+            <div class="kart-sahnesi">
+                <div class="kart" id="aktif-kart">
+                    <div class="kart-yuz kart-on">
+                        <p>Ön Yüz (Kelime)</p>
+                    </div>
+                    <div class="kart-yuz kart-arka">
+                        <p>Arka Yüz (Anlamı)</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="aksiyon-butonlari">
+                <button id="btn-yanlis">Yanlış (Sol Ok)</button>
+                <button id="btn-dogru">Doğru (Sağ Ok)</button>
+            </div>
+
+        </section>
+    </main>
+
+    <footer>
+        <p>2026 - Web Tasarım Final Projesi</p>
+    </footer>
+
+    <script src="./script.js" defer></script>
+</body>
+</html>

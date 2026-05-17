@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelime Ezberleme - Ana Sayfa</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+    <header>
+        <div class="header-sol">
+            <button id="menu-buton" class="menu-buton">☰</button>
+            <h1><a href="./index.html" class="logo-link">Kelime Ezberleme</a></h1>
+        </div>
+        
+        <nav id="yan-menu" class="yan-menu">
+            <div class="menu-baslik">Kelime Ezberleme</div>
+            
+            <a href="./index.html">Ana Sayfa</a>
+            <a href="./listeler.html">Listelerim</a>
+            <a href="./kartlar.html">Kart Yönetimi</a>
+            <a href="./calis.html">Çalışma Modu</a>
+            <a href="./ilerleme.html">İlerleme Takibi</a>
+        </nav>
+    </header>
+
+    <main>
+        <section id="dashboard" class="dashboard-alani">
+            
+            <div class="istatistik-izgarasi">
+                <div class="istatistik-kart">
+                    <div class="ikon-kutusu ates-ikonu">🔥</div>
+                    <div class="istatistik-bilgi">
+                        <h4>Çalışma Serisi</h4>
+                        <p class="sayi">12 Gün</p>
+                    </div>
+                </div>
+                <div class="istatistik-kart">
+                    <div class="ikon-kutusu kelime-ikonu">📚</div>
+                    <div class="istatistik-bilgi">
+                        <h4>Öğrenilen Kelime</h4>
+                        <p class="sayi">348</p>
+                    </div>
+                </div>
+                <div class="istatistik-kart">
+                    <div class="ikon-kutusu hedef-ikonu">🎯</div>
+                    <div class="istatistik-bilgi">
+                        <h4>Günlük Hedef</h4>
+                        <p class="sayi">%85</p>
+                        <div class="mini-progress-arka"><div class="mini-progress-dolu" style="width: 85%;"></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-alt-izgara">
+                
+                <div class="son-listeler-kutusu">
+                    <h3>Son Çalışılan Listeler</h3>
+                    <div class="liste-kartlari-kucuk">
+                        <div class="liste-satiri">
+                            <span class="liste-ikonu">🇬🇧</span>
+                            <div class="liste-detay">
+                                <h4>İngilizce B1 Kelimeler</h4>
+                                <p>120 Kart • %45 Öğrenildi</p>
+                            </div>
+                            <button class="btn-ikincil btn-kucuk">Devam Et</button>
+                        </div>
+                        <div class="liste-satiri">
+                            <span class="liste-ikonu">💻</span>
+                            <div class="liste-detay">
+                                <h4>Web Tasarım Terimleri</h4>
+                                <p>45 Kart • %80 Öğrenildi</p>
+                            </div>
+                            <button class="btn-ikincil btn-kucuk">Devam Et</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hizli-basla-kutusu">
+                    <h3>Bugünkü Antrenman</h3>
+                    <p>Günlük hedefini tamamlamak için bugün henüz çalışmadın. 15 yeni kart seni bekliyor!</p>
+                    <button id="btn-basla" class="btn-ana">Hemen Çalışmaya Başla</button>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>2026 - Web Tasarım Final Projesi</p>
+    </footer>
+
+    <script src="./script.js" defer></script>
+</body>
+</html>
