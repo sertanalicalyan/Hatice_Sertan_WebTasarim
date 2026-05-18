@@ -26,13 +26,17 @@
     </header>
 
     <main>
+        <button class="btn-geri" onclick="history.back()">⬅ Geri Dön</button>
         <section id="calisma-alani">
             <h2>Çalışma Modu</h2>
             
             <div class="calisma-ayarlari">
+                <select id="calisma-liste-secici" style="margin-right: 1rem; border-color: var(--renk-birincil); font-weight: bold;">
+                    </select>
+                
                 <select id="mod-secici">
                     <option value="sirali">Sıralı</option>
-                    <option value="rastgele">Rastgele</option>
+                    <option value="rastgele">Rastgele (Fisher-Yates)</option>
                     <option value="yanlislar">Yalnızca Yanlışlar</option>
                 </select>
                 <div class="ilerleme-konteyner">

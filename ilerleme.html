@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelime Ezberleme - İlerleme Takibi</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+    <header>
+        <div class="header-sol">
+            <button id="menu-buton" class="menu-buton">☰</button>
+            <h1><a href="./index.html" class="logo-link">Kelime Ezberleme</a></h1>
+        </div>
+        
+        <nav id="yan-menu" class="yan-menu">
+            <div class="menu-baslik">Kelime Ezberleme</div>
+            <a href="./index.html">Ana Sayfa</a>
+            <a href="./listeler.html">Listelerim</a>
+            <a href="./kartlar.html">Kart Yönetimi</a>
+            <a href="./calis.html">Çalışma Modu</a>
+            <a href="./ilerleme.html">İlerleme Takibi</a>
+        </nav>
+    </header>
+
+    <main>
+        <button class="btn-geri" onclick="history.back()">⬅ Geri Dön</button>
+        
+        <section id="ilerleme-sayfasi">
+            <h2 style="margin-bottom: 1.5rem; color: var(--renk-ikincil);">İlerleme ve İstatistikler</h2>
+            
+            <div class="istatistik-izgarasi">
+                <div class="istatistik-kart">
+                    <div class="ikon-kutusu ates-ikonu">🔥</div>
+                    <div class="istatistik-bilgi">
+                        <h4>Mevcut Seri (Streak)</h4>
+                        <p class="sayi" id="stat-seri">0 Gün</p>
+                    </div>
+                </div>
+                <div class="istatistik-kart">
+                    <div class="ikon-kutusu hedef-ikonu">✅</div>
+                    <div class="istatistik-bilgi">
+                        <h4>Genel Doğruluk</h4>
+                        <p class="sayi" id="stat-dogruluk">%0</p>
+                    </div>
+                </div>
+                <div class="istatistik-kart">
+                    <div class="ikon-kutusu kelime-ikonu">🧠</div>
+                    <div class="istatistik-bilgi">
+                        <h4>Tamamen Öğrenilen</h4>
+                        <p class="sayi" id="stat-ogrenilen">0 Kart</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ilerleme-alt-izgara" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2rem;">
+                
+                <div class="form-kutu" style="margin-bottom: 0;">
+                    <h3>En Zorlandığın Kartlar</h3>
+                    <ul id="zor-kartlar-listesi" class="zor-kartlar">
+                        </ul>
+                </div>
+
+                <div class="form-kutu" style="margin-bottom: 0;">
+                    <h3>Liste İlerlemeleri</h3>
+                    <div id="liste-ilerlemeleri-alani">
+                        </div>
+
+                    <h3 style="margin-top: 2.5rem;">Çalışma Serisi Takvimi</h3>
+                    <div class="takvim-grid" id="takvim-grid">
+                        </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <script src="./script.js" defer></script>
+</body>
+</html>
