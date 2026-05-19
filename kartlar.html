@@ -75,25 +75,25 @@
             </div>
         </section>
 
-        <div id="duzenle-modal" class="modal-arkaplan gizli">
+        <div id="modal-kart-duzenle" class="modal-arkaplan" style="display: none;">
             <div class="modal-icerik">
-                <span class="modal-kapat" id="btn-modal-kapat">&times;</span>
+                <span class="modal-kapat" id="btn-modal-kapat" onclick="modalKapat('modal-kart-duzenle')" style="float: right; cursor: pointer; font-size: 1.5rem;">&times;</span>
                 <h3>Kartı Düzenle</h3>
-                <form id="duzenle-kart-formu">
+                <form id="form-kart-duzenle">
                     <input type="hidden" id="duzenle-kart-id">
                     <div class="form-grup">
-                        <label for="duzenle-on-yuz">Ön Yüz (Kelime):</label>
-                        <input type="text" id="duzenle-on-yuz" required>
+                        <label for="duzenle-on">Ön Yüz (Kelime):</label>
+                        <input type="text" id="duzenle-on" required>
                     </div>
                     <div class="form-grup">
-                        <label for="duzenle-arka-yuz">Arka Yüz (Anlamı):</label>
-                        <input type="text" id="duzenle-arka-yuz" required>
+                        <label for="duzenle-arka">Arka Yüz (Anlamı):</label>
+                        <input type="text" id="duzenle-arka" required>
                     </div>
                     <div class="form-grup">
-                        <label for="duzenle-ornek-cumle">Örnek Cümle:</label>
-                        <textarea id="duzenle-ornek-cumle"></textarea>
+                        <label for="duzenle-ornek">Örnek Cümle:</label>
+                        <textarea id="duzenle-ornek"></textarea>
                     </div>
-                    <button type="submit" class="btn-guncelle">Değişiklikleri Kaydet</button>
+                    <button type="submit" class="btn-guncelle" style="width: 100%; margin-top: 10px;">Değişiklikleri Kaydet</button>
                 </form>
             </div>
         </div>

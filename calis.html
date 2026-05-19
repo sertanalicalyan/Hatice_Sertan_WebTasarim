@@ -61,7 +61,37 @@
             </div>
 
         </section>
+    
+    <div id="modal-oturum-bitti" class="modal-arkaplan" style="display: none;">
+            <div class="modal-icerik" style="text-align: center;">
+                <div style="font-size: 4rem; margin-bottom: 0.5rem;">🎉</div>
+                <h3 style="font-size: 1.6rem; color: var(--renk-ikincil); margin-bottom: 1rem;">Oturum Tamamlandı!</h3>
+                
+                <div style="display: flex; justify-content: space-around; margin-bottom: 1.5rem; background: #f1f5f9; padding: 1rem; border-radius: var(--radius-kucuk);">
+                    <div>
+                        <span style="display: block; font-size: 1.8rem; font-weight: bold; color: var(--renk-basari);" id="modal-sonuc-dogru">0</span>
+                        <span style="font-size: 0.95rem; color: var(--renk-metin-acik); font-weight: 500;">Doğru</span>
+                    </div>
+                    <div>
+                        <span style="display: block; font-size: 1.8rem; font-weight: bold; color: var(--renk-hata);" id="modal-sonuc-yanlis">0</span>
+                        <span style="font-size: 0.95rem; color: var(--renk-metin-acik); font-weight: 500;">Yanlış</span>
+                    </div>
+                </div>
+                
+                <p style="font-size: 1.05rem; line-height: 1.5; margin-bottom: 1.5rem; color: var(--renk-metin);" id="modal-sonuc-mesaj"></p>
+                
+                <div style="display: flex; flex-direction: column; gap: 0.8rem;">
+                    <button class="btn-hata" id="btn-yanlislardan-devam" style="display: none; background-color: var(--renk-hata); color: white; padding: 0.8rem; border-radius: var(--radius-kucuk); border: none; font-weight: 600; cursor: pointer; transition: 0.2s;">
+                        Yalnızca Yanlışlardan Devam Et
+                    </button>
+                    <button class="btn-ana" onclick="window.calismayiBaslat()" onclick="modalKapat('modal-oturum-bitti')">Aynı Listeyi Tekrar Çöz</button>
+                    <button class="btn-ikincil" onclick="window.location.href='./index.html'" style="background-color: transparent; color: var(--renk-metin-acik); border: 1px solid #cbd5e1;">Ana Sayfaya Dön</button>
+                </div>
+            </div>
+        </div>
+
     </main>
+
 
     <footer>
         <p>2026 - Web Tasarım Final Projesi</p>

@@ -29,28 +29,34 @@
         <section id="dashboard" class="dashboard-alani">
             
             <div class="istatistik-izgarasi">
-                <div class="istatistik-kart">
+                
+                <div class="istatistik-kart" style="cursor: pointer;" title="İlerleme Detaylarını Gör" onclick="window.location.href='./ilerleme.html'">
                     <div class="ikon-kutusu ates-ikonu">🔥</div>
                     <div class="istatistik-bilgi">
-                        <h4>Çalışma Serisi</h4>
-                        <p class="sayi">12 Gün</p>
+                        <h4>Mevcut Seri (Streak)</h4>
+                        <p class="sayi">0 Gün</p>
                     </div>
                 </div>
-                <div class="istatistik-kart">
+                
+                <div class="istatistik-kart" id="kart-ogrenilen" style="cursor: pointer;" title="Öğrenilen Kelimeleri Gör">
                     <div class="ikon-kutusu kelime-ikonu">📚</div>
                     <div class="istatistik-bilgi">
-                        <h4>Öğrenilen Kelime</h4>
-                        <p class="sayi">348</p>
+                        <h4>Tamamen Öğrenilen</h4>
+                        <p class="sayi">0 Kart</p>
                     </div>
                 </div>
-                <div class="istatistik-kart">
+                
+                <div class="istatistik-kart" id="kart-hedef" style="cursor: pointer;" title="Hedef Detayını Gör">
                     <div class="ikon-kutusu hedef-ikonu">🎯</div>
                     <div class="istatistik-bilgi">
                         <h4>Günlük Hedef</h4>
-                        <p class="sayi">%85</p>
-                        <div class="mini-progress-arka"><div class="mini-progress-dolu" style="width: 85%;"></div></div>
+                        <div class="mini-progress-arka" style="margin-top: 5px; height: 6px; margin-bottom: 2px;">
+                            <div class="mini-progress-dolu" style="width: 0%; background-color: var(--renk-basari);"></div>
+                        </div>
+                        <p class="sayi" style="font-size: 0.9rem;">%0</p>
                     </div>
                 </div>
+
             </div>
 
             <div class="dashboard-alt-izgara">
@@ -86,6 +92,33 @@
             </div>
         </section>
     </main>
+
+    <div id="modal-ogrenilen" class="modal-arkaplan" style="display: none;">
+            <div class="modal-icerik">
+                <div class="modal-ust">
+                    <h3>Öğrenilen Kelimeler</h3>
+                    <button class="btn-kapat" onclick="modalKapat('modal-ogrenilen')">✖</button>
+                </div>
+                <div class="modal-govde">
+                    <ul id="ogrenilen-kelimeler-listesi" class="kelime-liste-scroll">
+                        </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-hedef" class="modal-arkaplan" style="display: none;">
+            <div class="modal-icerik">
+                <div class="modal-ust">
+                    <h3>Günlük Hedef Durumu</h3>
+                    <button class="btn-kapat" onclick="modalKapat('modal-hedef')">✖</button>
+                </div>
+                <div class="modal-govde" style="text-align: center;">
+                    <div id="hedef-detay-alani">
+                        </div>
+                    <button class="btn-ana" onclick="window.location.href='./calis.html'" style="margin-top: 1.5rem; width: 100%;">Çalışmaya Devam Et</button>
+                </div>
+            </div>
+        </div>
 
     <footer>
         <p>2026 - Web Tasarım Final Projesi</p>

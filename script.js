@@ -206,15 +206,29 @@ window.listeSil = function(id) {
 /* ==========================================================================
    3. KART YÖNETİMİ SAYFASI (Tekli, Toplu Ekleme ve Listeleme)
    ========================================================================== */
+/* ==========================================================================
+   3. KART YÖNETİMİ SAYFASI (Tekli, Toplu Ekleme, Düzenleme ve Listeleme)
+   ========================================================================== */
 const listeSecici = document.getElementById('aktif-liste-secici');
 const kartlarIzgara = document.getElementById('kartlar-listesi-izgara');
 const yeniKartFormu = document.getElementById('yeni-kart-formu');
 const btnTopluEkle = document.getElementById('btn-toplu-ekle');
 
-// Eğer Kart Yönetimi sayfasındaysak bu kodlar çalışsın
+// HATA ÇÖZÜMÜ: Modalları kapatan global fonksiyonu buraya da ekledik
+window.modalKapat = function(modalId) {
+    const modal = document.getElementById(modalId);
+    if(modal) modal.style.display = 'none';
+};
+
+// Arka plana tıklanınca modalın kapanması için
+window.addEventListener('click', function(event) {
+    if (event.target.classList.contains('modal-arkaplan')) {
+        event.target.style.display = 'none';
+    }
+});
+
 if (listeSecici) {
     
-    // 1. Sayfa açıldığında "Listeler" verisini Seçim Kutusuna (Select) Doldur
     function listeleriSeciciyeYukle() {
         listeSecici.innerHTML = '<option value="">-- Bir Liste Seçin --</option>';
         appVeri.listeler.forEach(liste => {
@@ -224,16 +238,14 @@ if (listeSecici) {
             listeSecici.appendChild(option);
         });
 
-        // "Listelerim" sayfasından "Kartları Yönet" butonuna basılarak gelindiyse listeyi otomatik seç
         const urlParams = new URLSearchParams(window.location.search);
         const urlListeId = urlParams.get('liste');
         if (urlListeId) {
             listeSecici.value = urlListeId;
-            kartlariEkranaBas(); // Otomatik olarak o listenin kartlarını aşağıya getir
+            kartlariEkranaBas(); 
         }
     }
 
-    // 2. Seçilen Listenin İçindeki Kartları Aşağıdaki Ekrana Bas
     function kartlariEkranaBas() {
         const seciliListeId = listeSecici.value;
         kartlarIzgara.innerHTML = '';
@@ -250,7 +262,6 @@ if (listeSecici) {
             return;
         }
 
-        // Kartları listele
         seciliListe.kartlar.forEach(kart => {
             const kartDiv = document.createElement('div');
             kartDiv.className = 'yonetim-karti';
@@ -264,7 +275,7 @@ if (listeSecici) {
                 </div>
                 ${kart.ornek ? `<p class="ornek-metin"><em>Örnek:</em> ${kart.ornek}</p>` : ''}
                 <div class="liste-aksiyonlar" style="margin-top:1rem; border-top: 1px solid #f1f5f9; padding-top: 1rem;">
-                    <button class="btn-ikincil btn-kucuk">Düzenle</button> 
+                    <button class="btn-ikincil btn-kucuk" onclick="kartDuzenleAc('${seciliListeId}', '${kart.id}')">Düzenle</button> 
                     <button class="btn-sil btn-kucuk" onclick="kartSil('${seciliListeId}', '${kart.id}')">Sil</button>
                 </div>
             `;
@@ -272,69 +283,54 @@ if (listeSecici) {
         });
     }
 
-    // Select kutusunda başka bir liste seçilirse ekranı hemen güncelle
     listeSecici.addEventListener('change', kartlariEkranaBas);
 
-    // 3. Tek Tek Form Üzerinden Kart Ekleme İşlemi
     if (yeniKartFormu) {
         yeniKartFormu.addEventListener('submit', (e) => {
             e.preventDefault();
             const seciliListeId = listeSecici.value;
-            if (!seciliListeId) {
-                alert("Lütfen kartı kaydetmeden önce yukarıdan bir liste seçin!");
-                return;
-            }
+            if (!seciliListeId) { alert("Lütfen kartı kaydetmeden önce yukarıdan bir liste seçin!"); return; }
 
             const yeniKart = {
                 id: 'kart-' + Date.now(),
                 onYuz: document.getElementById('kart-on-yuz').value,
                 arkaYuz: document.getElementById('kart-arka-yuz').value,
                 ornek: document.getElementById('kart-ornek-cumle').value,
-                durum: 'yeni', // Kılavuz kuralı: Tüm yeni kartlar 'yeni' statüsünde başlar
+                durum: 'yeni', 
                 dogru: 0,
                 yanlis: 0
             };
 
             const seciliListe = appVeri.listeler.find(l => l.id === seciliListeId);
             seciliListe.kartlar.push(yeniKart);
-            verileriKaydet(appVeri); // LocalStorage'a yaz
-            kartlariEkranaBas();     // Ekranı güncelle
-            yeniKartFormu.reset();   // Formu temizle
+            verileriKaydet(appVeri); 
+            kartlariEkranaBas();     
+            yeniKartFormu.reset();   
         });
     }
 
-    // 4. KILAVUZ ZORUNLULUĞU: Toplu Metin Yapıştırarak Kart Ekleme 
     if (btnTopluEkle) {
         btnTopluEkle.addEventListener('click', () => {
             const seciliListeId = listeSecici.value;
-            if (!seciliListeId) {
-                alert("Lütfen toplu ekleme yapılacak listeyi yukarıdan seçin!");
-                return;
-            }
+            if (!seciliListeId) { alert("Lütfen toplu ekleme yapılacak listeyi seçin!"); return; }
 
             const metinKutusu = document.getElementById('toplu-kart-metin');
             const metin = metinKutusu.value.trim();
             
-            if (!metin) {
-                alert("Lütfen önce metin kutusuna 'kelime; anlam' formatında kelimelerinizi yapıştırın.");
-                return;
-            }
+            if (!metin) { alert("Lütfen metin girin."); return; }
 
-            const satirlar = metin.split('\n'); // Her satırı ayır 
+            const satirlar = metin.split('\n'); 
             let eklenenSayisi = 0;
             const seciliListe = appVeri.listeler.find(l => l.id === seciliListeId);
 
             satirlar.forEach((satir, index) => {
-                const parcalar = satir.split(';'); // Noktalı virgüle göre ayır 
+                const parcalar = satir.split(';'); 
                 if (parcalar.length >= 2) {
                     const yeniKart = {
-                        id: 'kart-' + Date.now() + index, // Benzersiz ID
+                        id: 'kart-' + Date.now() + index, 
                         onYuz: parcalar[0].trim(),
                         arkaYuz: parcalar[1].trim(),
-                        ornek: '',
-                        durum: 'yeni',
-                        dogru: 0,
-                        yanlis: 0
+                        ornek: '', durum: 'yeni', dogru: 0, yanlis: 0
                     };
                     seciliListe.kartlar.push(yeniKart);
                     eklenenSayisi++;
@@ -344,25 +340,55 @@ if (listeSecici) {
             if (eklenenSayisi > 0) {
                 verileriKaydet(appVeri);
                 kartlariEkranaBas();
-                metinKutusu.value = ''; // Kutuyu temizle
-                alert(`${eklenenSayisi} adet kart başarıyla oluşturuldu ve listeye eklendi!`);
-            } else {
-                alert("Uygun formatta kelime bulunamadı. Lütfen her satırın 'kelime; anlam' şeklinde olduğuna emin olun.");
+                metinKutusu.value = ''; 
+                alert(`${eklenenSayisi} adet kart başarıyla oluşturuldu!`);
             }
         });
     }
 
-    // Sayfa ilk yüklendiğinde çalışacak başlangıç ayarları
+    // --- HATA ÇÖZÜMÜ: DÜZENLEME FORMUNUN KAYDEDİLMESİ ---
+    const formKartDuzenle = document.getElementById('form-kart-duzenle');
+    if (formKartDuzenle) {
+        formKartDuzenle.addEventListener('submit', (e) => {
+            e.preventDefault(); 
+            
+            const listeId = listeSecici.value;
+            const kartId = document.getElementById('duzenle-kart-id').value;
+            
+            const liste = appVeri.listeler.find(l => l.id === listeId);
+            const kart = liste.kartlar.find(k => k.id === kartId);
+            
+            kart.onYuz = document.getElementById('duzenle-on').value;
+            kart.arkaYuz = document.getElementById('duzenle-arka').value;
+            kart.ornek = document.getElementById('duzenle-ornek').value;
+            
+            verileriKaydet(appVeri); // LocalStorage'a kaydet
+            kartlariEkranaBas();     // Ekranı güncelle
+            document.getElementById('modal-kart-duzenle').style.display = 'none'; // Modalı kapat
+        });
+    }
+
     listeleriSeciciyeYukle();
 }
 
-// Kart Silme Fonksiyonu (Tüm dosyalardan erişilebilmesi için Window nesnesinde)
+// --- HATA ÇÖZÜMÜ: KART DÜZENLEME PENCERESİNİ AÇAN FONKSİYON ---
+window.kartDuzenleAc = function(listeId, kartId) {
+    const liste = appVeri.listeler.find(l => l.id === listeId);
+    const kart = liste.kartlar.find(k => k.id === kartId);
+    
+    document.getElementById('duzenle-kart-id').value = kartId;
+    document.getElementById('duzenle-on').value = kart.onYuz;
+    document.getElementById('duzenle-arka').value = kart.arkaYuz;
+    document.getElementById('duzenle-ornek').value = kart.ornek || '';
+    
+    document.getElementById('modal-kart-duzenle').style.display = 'flex';
+};
+
 window.kartSil = function(listeId, kartId) {
     if(confirm('Bu kelime kartını silmek istediğinize emin misiniz?')) {
         const liste = appVeri.listeler.find(l => l.id === listeId);
-        liste.kartlar = liste.kartlar.filter(k => k.id !== kartId); // Silinen kartı filtrele
+        liste.kartlar = liste.kartlar.filter(k => k.id !== kartId); 
         verileriKaydet(appVeri);
-        // Eğer o an kartlar sayfasındaysak ekranı anında güncelle
         if(document.getElementById('kartlar-listesi-izgara')) {
             document.getElementById('aktif-liste-secici').dispatchEvent(new Event('change'));
         }
@@ -548,7 +574,7 @@ if (modSecici && btnDogru && calismaListeSecici) {
     modSecici.addEventListener('change', calismayiBaslat);
     calismaListeSecici.addEventListener('change', calismayiBaslat);
     
-  // Sayfa yüklendiğinde listeleri 'calismaListeSecici' kutusuna doldur
+    // Sayfa yüklendiğinde listeleri 'calismaListeSecici' kutusuna doldur
     appVeri.listeler.forEach(liste => {
         calismaListeSecici.innerHTML += `<option value="${liste.id}">${liste.emoji} ${liste.ad}</option>`;
     });
@@ -568,37 +594,83 @@ if (modSecici && btnDogru && calismaListeSecici) {
 function oturumBitti() {
     ilerlemeCubugu.style.width = '100%';
     const toplamSoru = oturumDogru + oturumYanlis;
-    const yuzde = toplamSoru === 0 ? 0 : Math.round((oturumDogru / toplamSoru) * 100);
     
-    // DÜZELTME 1: Eğer kart arkaya dönükse, özet ekranını görebilmemiz için otomatik olarak ÖN YÜZE çeviriyoruz
+    // 1. Modalı ve İçindeki Elementleri Seç
+    const modalOturumBitti = document.getElementById('modal-oturum-bitti');
+    const dogruYazi = document.getElementById('modal-sonuc-dogru');
+    const yanlisYazi = document.getElementById('modal-sonuc-yanlis');
+    const mesajYazi = document.getElementById('modal-sonuc-mesaj');
+    const btnYanlislar = document.getElementById('btn-yanlislardan-devam');
+
+    // 2. Modala Verileri Bas
+    if (modalOturumBitti) {
+        dogruYazi.textContent = oturumDogru;
+        yanlisYazi.textContent = oturumYanlis;
+
+        // Kullanıcının hiç yanlışı yoksa farklı, varsa farklı mesaj ve buton göster
+        if (oturumYanlis > 0) {
+            mesajYazi.innerHTML = `Bu oturumda <strong>${oturumYanlis} kelimede</strong> zorlandın. Şimdi hemen o yanlışlarına odaklanmak ister misin?`;
+            btnYanlislar.style.display = 'block'; // Yanlışlar butonunu göster
+            
+            // Yanlışlardan devam et butonuna tıklanma olayı
+            btnYanlislar.onclick = () => {
+                modalOturumBitti.style.display = 'none'; // Modalı kapat
+                document.getElementById('mod-secici').value = 'yanlislar'; // Modu arka planda değiştir
+                window.calismayiBaslat(); // Çalışmayı yeniden başlat
+            };
+        } else {
+            mesajYazi.innerHTML = `Kusursuz bir iş çıkardın! Tüm kelimeleri <strong>doğru</strong> bildin.`;
+            btnYanlislar.style.display = 'none'; // Yanlışı yoksa butonu gizle
+        }
+
+        modalOturumBitti.style.display = 'flex'; // Modalı Ekrana Getir
+    }
+
+    // Kartın arka planını temizle ve düzelt
     if (aktifKartSahnesi && aktifKartSahnesi.classList.contains('dondur')) {
         aktifKartSahnesi.classList.remove('dondur');
     }
+    kartOnYuz.textContent = "Oturum Tamamlandı";
+    if (kartArkaYuz) kartArkaYuz.textContent = "Sonuçlar ekranda.";
     
-    // DÜZELTME 2: Geçersiz HTML yapısını (p içine div koymayı) önlemek için inline-block span elemanları kullanıyoruz
-    kartOnYuz.innerHTML = `
-        <span style="font-size: 1.4rem; display: block; margin-bottom: 0.8rem; font-weight: 700; color: var(--renk-ikincil);">🎉 Oturum Bitti!</span>
-        <span style="font-size: 1.1rem; display: block; color: var(--renk-basari); font-weight: 600; margin-bottom: 0.2rem;">${oturumDogru} Doğru</span>
-        <span style="font-size: 1.1rem; display: block; color: var(--renk-hata); font-weight: 600; margin-bottom: 0.5rem;">${oturumYanlis} Yanlış</span>
-        <span style="font-size: 1.1rem; display: block; font-weight: bold; margin-bottom: 1.2rem; padding-top: 0.3rem; border-top: 1px dashed #cbd5e1;">Başarı Oranı: %${yuzde}</span>
-        <button class="btn-ana btn-kucuk" style="margin: 0 auto; display: inline-flex;" onclick="window.calismayiBaslat()">Tekrar Çalış</button>
-    `;
-    
-    if (kartArkaYuz) {
-        kartArkaYuz.textContent = "Harika bir çalışma seansı bitti!";
-    }
-    
-    // Her ihtimale karşı istatistik nesnesi boşsa güvenli kurulum yapıyoruz
+    // --- İstatistikleri ve Geçmişi Kaydetme İşlemleri ---
     if (!appVeri.istatistikler) {
         appVeri.istatistikler = { seriGunu: 0, gunlukHedef: 20, bugunCalisilan: 0, sonCalismaTarihi: null };
     }
     
-    // Streak (Seri) işlemleri için günlük kaydı tut
-    const bugun = new Date().toLocaleDateString();
+    const bugun = new Date().toLocaleDateString('tr-TR'); 
+    if (!appVeri.istatistikler.calismaGecmisi) {
+        appVeri.istatistikler.calismaGecmisi = {}; 
+    }
+
+    // YENİ EKLENEN: Sadece toplam sayıyı değil, doğru/yanlış sayılarını da obje olarak kaydediyoruz
+    if (appVeri.istatistikler.calismaGecmisi[bugun]) {
+        // Eski kaydı güncelle (eğer önceden sadece sayı olarak kaydedildiyse hata vermemesi için nesneye çeviriyoruz)
+        if (typeof appVeri.istatistikler.calismaGecmisi[bugun] === 'number') {
+            appVeri.istatistikler.calismaGecmisi[bugun] = {
+                toplam: appVeri.istatistikler.calismaGecmisi[bugun] + toplamSoru,
+                dogru: oturumDogru,
+                yanlis: oturumYanlis
+            };
+        } else {
+            appVeri.istatistikler.calismaGecmisi[bugun].toplam += toplamSoru;
+            appVeri.istatistikler.calismaGecmisi[bugun].dogru += oturumDogru;
+            appVeri.istatistikler.calismaGecmisi[bugun].yanlis += oturumYanlis;
+        }
+    } else {
+        // İlk defa kaydediliyorsa doğrudan nesne olarak yaz
+        appVeri.istatistikler.calismaGecmisi[bugun] = {
+            toplam: toplamSoru,
+            dogru: oturumDogru,
+            yanlis: oturumYanlis
+        };
+    }
+    
     if(appVeri.istatistikler.sonCalismaTarihi !== bugun) {
         appVeri.istatistikler.seriGunu++;
         appVeri.istatistikler.sonCalismaTarihi = bugun;
     }
+    
     appVeri.istatistikler.bugunCalisilan += toplamSoru;
     verileriKaydet(appVeri);
 }
@@ -609,6 +681,43 @@ function oturumBitti() {
 const ilerlemeSayfasi = document.getElementById('ilerleme-sayfasi');
 
 if (ilerlemeSayfasi) {
+    // 6. YENİ EKLENEN: Günlük Çalışma Geçmişini Ekrana Basma
+        // 6. Günlük Çalışma Geçmişini Ekrana Basma (Doğru/Yanlış Detaylı)
+        const gecmisListesiAlani = document.getElementById('calisma-gecmisi-listesi');
+        if (gecmisListesiAlani) {
+            gecmisListesiAlani.innerHTML = '';
+            const gecmisVerisi = appVeri.istatistikler.calismaGecmisi || {};
+            const tarihler = Object.keys(gecmisVerisi).reverse(); // En yakın günü en üstte göster
+
+            if (tarihler.length === 0) {
+                gecmisListesiAlani.innerHTML = '<p class="bos-uyari">Henüz tamamlanmış bir çalışma seansınız yok.</p>';
+            } else {
+                tarihler.forEach(tarih => {
+                    const veri = gecmisVerisi[tarih];
+                    // Geçmiş veri uyumluluğu kontrolü (Eğer sadece sayıysa eski format, nesneyse yeni format)
+                    const toplam = typeof veri === 'number' ? veri : veri.toplam;
+                    
+                    // Doğru ve Yanlış etiketlerini oluştur (Yeşil D ve Kırmızı Y)
+                    const detayHtml = typeof veri !== 'number' ? `
+                        <span style="background-color: #f0fdf4; color: #166534; padding: 0.3rem 0.6rem; border-radius: 20px; font-size: 0.8rem; font-weight: bold; margin-left: 0.3rem;">${veri.dogru} D</span>
+                        <span style="background-color: #fef2f2; color: #991b1b; padding: 0.3rem 0.6rem; border-radius: 20px; font-size: 0.8rem; font-weight: bold; margin-left: 0.3rem;">${veri.yanlis} Y</span>
+                    ` : '';
+
+                    gecmisListesiAlani.innerHTML += `
+                        <li style="display: flex; justify-content: space-between; align-items: center;">
+                            <span class="zor-kelime" style="font-weight: 500; color: var(--renk-metin);">${tarih}</span>
+                            <div style="display: flex; align-items: center;">
+                                <span class="zor-hata" style="background-color: #eff6ff; color: #1e40af; border-color: rgba(37, 99, 235, 0.15);">
+                                    ${toplam} Kart
+                                </span>
+                                ${detayHtml}
+                            </div>
+                        </li>
+                    `;
+                });
+            }
+        }
+    
     function istatistikleriHesapla() {
         let toplamDogru = 0;
         let toplamYanlis = 0;
@@ -751,6 +860,74 @@ if (dashboardSonListeler && anaSayfaBtnBasla) {
                     <button class="btn-ikincil btn-kucuk" onclick="window.location.href='./calis.html?liste=${liste.id}'">Devam Et</button>
                 </div>
             `;
+        });
+    } // <-- BURADAKİ KAPATMA PARANTEZİ DÜZELTİLDİ
+
+    // --- YENİ EKLENEN: Modal Etkileşimleri ve İçerik Doldurma ---
+    const kartOgrenilen = document.getElementById('kart-ogrenilen');
+    const kartHedef = document.getElementById('kart-hedef');
+    const modalOgrenilen = document.getElementById('modal-ogrenilen');
+    const modalHedef = document.getElementById('modal-hedef');
+
+    // Kapatma Fonksiyonu (Global erişim için window nesnesine atıyoruz)
+    window.modalKapat = function(modalId) {
+        document.getElementById(modalId).style.display = 'none';
+    };
+
+    // Arka plana tıklayınca kapatma
+    window.onclick = function(event) {
+        if (event.target.classList.contains('modal-arkaplan')) {
+            event.target.style.display = 'none';
+        }
+    };
+
+    // 1. Öğrenilen Kelimeler Kartına Tıklanma
+    if (kartOgrenilen && modalOgrenilen) {
+        kartOgrenilen.addEventListener('click', () => {
+            const listeAlani = document.getElementById('ogrenilen-kelimeler-listesi');
+            listeAlani.innerHTML = '';
+            let ogrenilenler = [];
+            
+            // Veritabanından tüm öğrenilen kelimeleri bul
+            appVeri.listeler.forEach(l => {
+                l.kartlar.forEach(k => {
+                    if (k.durum === 'öğrenildi') ogrenilenler.push(k);
+                });
+            });
+
+            if (ogrenilenler.length === 0) {
+                listeAlani.innerHTML = '<p class="bos-uyari">Henüz tamamen öğrenilmiş (3 kez üst üste doğru bilinen) bir kelimeniz yok. Çalışmaya devam edin!</p>';
+            } else {
+                ogrenilenler.forEach(k => {
+                    listeAlani.innerHTML += `<li><span class="kelime-on">${k.onYuz}</span> <span class="kelime-arka">${k.arkaYuz}</span></li>`;
+                });
+            }
+            modalOgrenilen.style.display = 'flex';
+        });
+    }
+
+    // 2. Günlük Hedef Kartına Tıklanma
+    if (kartHedef && modalHedef) {
+        kartHedef.addEventListener('click', () => {
+            const detayAlani = document.getElementById('hedef-detay-alani');
+            const hedef = appVeri.istatistikler.gunlukHedef;
+            const yapilan = appVeri.istatistikler.bugunCalisilan;
+            const kalan = Math.max(0, hedef - yapilan);
+            const yuzde = Math.min(100, Math.round((yapilan / hedef) * 100));
+
+            detayAlani.innerHTML = `
+                <div style="font-size: 3.5rem; margin-bottom: 0.5rem;">🎯</div>
+                <p style="font-size: 1.1rem; margin-bottom: 0.5rem; color:var(--renk-metin);">Bugünkü Hedef: <strong>${hedef} Kart</strong></p>
+                <p style="font-size: 1.1rem; margin-bottom: 1rem; color:var(--renk-metin);">Şu Ana Kadar Çalışılan: <strong>${yapilan} Kart</strong></p>
+                <div class="mini-progress-arka" style="height: 12px; margin-bottom: 1rem;">
+                    <div class="mini-progress-dolu" style="width: ${yuzde}%; background-color: var(--renk-basari);"></div>
+                </div>
+                ${kalan > 0 
+                    ? `<p style="color: var(--renk-metin-acik);">Bugünkü hedefine ulaşmak için <strong style="color:var(--renk-ikincil);">${kalan} kelime</strong> daha çalışmalısın!</p>`
+                    : `<p style="color: var(--renk-basari); font-weight:bold;">Tebrikler! Bugünkü hedefini başarıyla tamamladın!</p>`
+                }
+            `;
+            modalHedef.style.display = 'flex';
         });
     }
 }
