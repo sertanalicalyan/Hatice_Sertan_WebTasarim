@@ -854,3 +854,141 @@ footer {
 /* Scrollbar Güzelleştirme */
 .kelime-liste-scroll::-webkit-scrollbar { width: 6px; }
 .kelime-liste-scroll::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 4px; }
+
+/* ==========================================================================
+   GECE MODU RENK PALETİ (TÜM SAYFALAR VE ANA SAYFA UYARLANMIŞ HALİ)
+   ========================================================================== */
+[data-theme="dark"] body {
+    background-color: #0f172a;
+    color: #f8fafc;
+}
+
+/* Tüm sayfalardaki ortak kutular ve Ana Sayfadaki sorunlu listeler */
+[data-theme="dark"] header,
+[data-theme="dark"] .yan-menu,
+[data-theme="dark"] .istatistik-kart,
+[data-theme="dark"] .form-kutu,
+[data-theme="dark"] .liste-karti,
+[data-theme="dark"] .yonetim-karti,
+[data-theme="dark"] .modal-icerik,
+[data-theme="dark"] .kart-on,
+[data-theme="dark"] .kart-arka,
+[data-theme="dark"] .liste-kartlari-kucuk,
+[data-theme="dark"] .liste-satiri {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    color: #f8fafc !important;
+}
+
+/* Tüm standart başlıklar, düz metinler ve listelerin içindeki detay yazıları */
+[data-theme="dark"] h1, 
+[data-theme="dark"] h2, 
+[data-theme="dark"] h3, 
+[data-theme="dark"] h4, 
+[data-theme="dark"] p, 
+[data-theme="dark"] label, 
+[data-theme="dark"] span,
+[data-theme="dark"] .liste-detay h4,
+[data-theme="dark"] .liste-detay p,
+[data-theme="dark"] .bos-uyari {
+    color: #f8fafc !important;
+}
+
+/* Form girdileri, seçim kutuları ve metin alanları */
+[data-theme="dark"] input,
+[data-theme="dark"] select,
+[data-theme="dark"] textarea {
+    background-color: #0f172a !important;
+    color: #f8fafc !important;
+    border: 1px solid #334155 !important;
+}
+
+/* Listelerin ve satırların alt sınır çizgileri */
+[data-theme="dark"] li,
+[data-theme="dark"] .liste-satiri {
+    border-bottom-color: #334155 !important;
+}
+
+[data-theme="dark"] .liste-aksiyonlar {
+    border-top-color: #334155 !important;
+}
+
+/* Gece modunda ana sayfadaki listelerin üzerine gelindiğinde (hover) hafif parlama efekti */
+[data-theme="dark"] .liste-satiri:hover {
+    background-color: #334155 !important;
+}
+
+/* Gece modunda "Devam Et" butonlarının görünürlüğü */
+[data-theme="dark"] .liste-satiri .btn-ikincil {
+    color: #f8fafc !important;
+    border-color: #3b82f6 !important;
+}
+
+/* ==========================================================================
+   GECE MODU: ANA SAYFA DIŞ KUTU DÜZELTMESİ (FİNAL)
+   ========================================================================== */
+[data-theme="dark"] .beyaz-kutu,
+[data-theme="dark"] .dashboard-kutu,
+[data-theme="dark"] .ana-kutu {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* ==========================================================================
+   GECE MODU: "DEVAM ET" VE İKİNCİL BUTON DÜZELTMESİ
+   ========================================================================== */
+[data-theme="dark"] .btn-ikincil {
+    background-color: transparent !important;
+    color: #60a5fa !important; /* Göz yormayan açık mavi metin */
+    border: 1px solid #3b82f6 !important; /* Mavi kenarlık */
+}
+
+/* Gece modunda butonun üzerine fare ile gelince oluşacak efekt */
+[data-theme="dark"] .btn-ikincil:hover {
+    background-color: rgba(59, 130, 246, 0.15) !important;
+}
+
+/* ==========================================================================
+   GECE MODU: LİSTELERİM SAYFASI ALT METİN (KATEGORİ/DİL) DÜZELTMESİ
+   ========================================================================== */
+[data-theme="dark"] .liste-karti p,
+[data-theme="dark"] .liste-karti span,
+[data-theme="dark"] .liste-karti small,
+[data-theme="dark"] .liste-meta,
+[data-theme="dark"] .liste-kategori {
+    color: #94a3b8 !important; /* Göz yormayan açık gri tonu */
+}
+
+/* Kart başlıklarını da garantiye alalım (Tam beyaz) */
+[data-theme="dark"] .liste-karti h2,
+[data-theme="dark"] .liste-karti h3 {
+    color: #f8fafc !important; 
+}
+
+/* ==========================================================================
+   GECE MODU: İLERLEME TAKİBİ SAYFASI RENKLİ İSTATİSTİK DÜZELTMELERİ
+   ========================================================================== */
+
+/* 1. "En Zorlandığın Kartlar" listesindeki kırmızı yanlış sayıları */
+[data-theme="dark"] #zor-kartlar-listesi li span:last-child {
+    color: #f87171 !important; /* Gece moduna özel parlak ve okunaklı kırmızı */
+    font-weight: bold;
+}
+
+/* 2. "Günlük Çalışma Geçmişi" tablosundaki renkli istatistikler */
+/* Toplam Soru Sayısı (Mavi) */
+[data-theme="dark"] #calisma-gecmisi-listesi li span:nth-child(2) {
+    color: #60a5fa !important; 
+}
+
+/* Doğru Sayısı (Yeşil) */
+[data-theme="dark"] #calisma-gecmisi-listesi li span:nth-child(3) {
+    color: #4ade80 !important; 
+}
+
+/* Yanlış Sayısı (Kırmızı) */
+[data-theme="dark"] #calisma-gecmisi-listesi li span:nth-child(4) {
+    color: #f87171 !important; 
+}

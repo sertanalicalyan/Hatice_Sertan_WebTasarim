@@ -8,15 +8,16 @@
 </head>
 <body>
 
-    <header>
+    <header style="display: flex; justify-content: space-between; align-items: center; padding-right: 15px;">
         <div class="header-sol">
             <button id="menu-buton" class="menu-buton">☰</button>
             <h1><a href="./index.html" class="logo-link">Kelime Ezberleme</a></h1>
         </div>
         
+        <button id="tema-degistir" style="background: transparent; border: none; box-shadow: none; font-size: 1.3rem; cursor: pointer; margin-left: auto; padding: 0; outline: none; transition: transform 0.2s;" title="Temayı Değiştir">🌙</button>
+        
         <nav id="yan-menu" class="yan-menu">
             <div class="menu-baslik">Kelime Ezberleme</div>
-            
             <a href="./index.html">Ana Sayfa</a>
             <a href="./listeler.html">Listelerim</a>
             <a href="./kartlar.html">Kart Yönetimi</a>
@@ -59,29 +60,31 @@
 
             </div>
 
-            <div class="dashboard-alt-izgara">
+            <div class="dashboard-alt-izgara" style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-top: 2rem;">
                 
-                <div class="son-listeler-kutusu">
-                    <h3>Son Çalışılan Listeler</h3>
-                    <div class="liste-kartlari-kucuk">
-                        <div class="liste-satiri">
-                            <span class="liste-ikonu">🇬🇧</span>
-                            <div class="liste-detay">
-                                <h4>İngilizce B1 Kelimeler</h4>
-                                <p>120 Kart • %45 Öğrenildi</p>
-                            </div>
-                            <button class="btn-ikincil btn-kucuk">Devam Et</button>
-                        </div>
-                        <div class="liste-satiri">
-                            <span class="liste-ikonu">💻</span>
-                            <div class="liste-detay">
-                                <h4>Web Tasarım Terimleri</h4>
-                                <p>45 Kart • %80 Öğrenildi</p>
-                            </div>
-                            <button class="btn-ikincil btn-kucuk">Devam Et</button>
-                        </div>
-                    </div>
+    <div class="form-kutu" style="margin-bottom: 0;">
+        <h3 style="margin-bottom: 1rem;">Son Çalışılan Listeler</h3>
+        <div class="liste-kartlari-kucuk" id="son-listeler-alani">
+            <div class="liste-satiri">
+                <span class="liste-ikonu">🇬🇧</span>
+                <div class="liste-detay">
+                    <h4>İngilizce B1 Kelimeler</h4>
+                    <p>120 Kart • %45 Öğrenildi</p>
                 </div>
+                <button class="btn-ikincil btn-kucuk">Devam Et</button>
+            </div>
+            <div class="liste-satiri">
+                <span class="liste-ikonu">💻</span>
+                <div class="liste-detay">
+                    <h4>Web Tasarım Terimleri</h4>
+                    <p>45 Kart • %80 Öğrenildi</p>
+                </div>
+                <button class="btn-ikincil btn-kucuk">Devam Et</button>
+            </div>
+        </div>
+    </div>
+
+    
 
                 <div class="hizli-basla-kutusu">
                     <h3>Bugünkü Antrenman</h3>

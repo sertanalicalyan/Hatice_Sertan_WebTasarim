@@ -1,4 +1,33 @@
 /* ==========================================================================
+   GECE MODU (DARK MODE) SİSTEMİ
+   ========================================================================== */
+const temaButonu = document.getElementById('tema-degistir');
+const anaHtml = document.documentElement;
+
+// 1. Sayfa yüklendiğinde hafızadaki temayı kontrol et
+if (localStorage.getItem('tema') === 'dark') {
+    anaHtml.setAttribute('data-theme', 'dark');
+    if (temaButonu) temaButonu.textContent = '☀️';
+}
+
+// 2. Butona tıklandığında temayı değiştir ve kaydet
+if (temaButonu) {
+    temaButonu.addEventListener('click', () => {
+        if (anaHtml.getAttribute('data-theme') === 'dark') {
+            // Aydınlık moda geçiş
+            anaHtml.removeAttribute('data-theme');
+            localStorage.setItem('tema', 'light');
+            temaButonu.textContent = '🌙';
+        } else {
+            // Gece moduna geçiş
+            anaHtml.setAttribute('data-theme', 'dark');
+            localStorage.setItem('tema', 'dark');
+            temaButonu.textContent = '☀️';
+        }
+    });
+}
+
+/* ==========================================================================
    1. VERİ MODELİ VE LOCALSTORAGE YÖNETİMİ
    ========================================================================== */
 
