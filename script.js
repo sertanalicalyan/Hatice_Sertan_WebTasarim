@@ -433,6 +433,7 @@ let calisilacakKartlar = [];
 let aktifKartIndex = 0;
 let oturumDogru = 0;
 let oturumYanlis = 0;
+let oturumdakiYanlisKartlar = [];
 
 if (modSecici && btnDogru && calismaListeSecici) {
 
@@ -454,6 +455,8 @@ if (modSecici && btnDogru && calismaListeSecici) {
         const seciliListeId = calismaListeSecici.value;
         if (!seciliListeId) return;
 
+        oturumdakiYanlisKartlar = [];
+        
         const seciliListe = appVeri.listeler.find(l => l.id === seciliListeId);
         const mod = modSecici.value;
 
@@ -529,26 +532,28 @@ if (modSecici && btnDogru && calismaListeSecici) {
         if(calisilacakKartlar.length === 0 || aktifKartIndex >= calisilacakKartlar.length) return;
 
         const mevcutKart = calisilacakKartlar[aktifKartIndex];
-        // Veritabanımızdaki asıl kartı buluyoruz ki durumunu kaydedelim
         const gercekListe = appVeri.listeler.find(l => l.id === calismaListeSecici.value);
         const gercekKart = gercekListe.kartlar.find(k => k.id === mevcutKart.id);
 
         if (dogruMu) {
             oturumDogru++;
             gercekKart.dogru++;
-            // Kural: 3 Doğru cevapta kart "Öğrenildi" statüsüne geçer
             gercekKart.durum = gercekKart.dogru >= 3 ? 'öğrenildi' : 'öğreniliyor';
         } else {
             oturumYanlis++;
             gercekKart.yanlis++;
             gercekKart.durum = 'öğreniliyor';
-            // Kural: Yanlış bilinen kart listeye tekrar eklenir
             calisilacakKartlar.push(mevcutKart); 
+            
+            // DÜZELTME: Bu oturumda hata yapılan kartı seans listesine ekle (içinde yoksa)
+            if (!oturumdakiYanlisKartlar.some(k => k.id === gercekKart.id)) {
+                oturumdakiYanlisKartlar.push(gercekKart);
+            }
         }
 
-        verileriKaydet(appVeri); // Değişikliği kalıcı yap
+        verileriKaydet(appVeri); 
         aktifKartIndex++;
-        kartGoster(); // Sıradaki kartı çağır
+        kartGoster(); 
     }
 
     // Buton Tıklamaları
@@ -613,10 +618,19 @@ function oturumBitti() {
             btnYanlislar.style.display = 'block'; // Yanlışlar butonunu göster
             
             // Yanlışlardan devam et butonuna tıklanma olayı
+            // Yanlışlardan devam et butonuna tıklanma olayı
             btnYanlislar.onclick = () => {
                 modalOturumBitti.style.display = 'none'; // Modalı kapat
-                document.getElementById('mod-secici').value = 'yanlislar'; // Modu arka planda değiştir
-                window.calismayiBaslat(); // Çalışmayı yeniden başlat
+                
+                // KESİN ÇÖZÜM: Genel filtreyi çağırmak yerine doğrudan nokta atışı seans hatalarını yüklüyoruz
+                calisilacakKartlar = [...oturumdakiYanlisKartlar];
+                oturumdakiYanlisKartlar = []; // Yeni alt seans için temizle
+                
+                aktifKartIndex = 0;
+                oturumDogru = 0;
+                oturumYanlis = 0;
+                
+                kartGoster(); // Sadece yanlışlardan oluşan yeni seansı başlat
             };
         } else {
             mesajYazi.innerHTML = `Kusursuz bir iş çıkardın! Tüm kelimeleri <strong>doğru</strong> bildin.`;
@@ -633,7 +647,7 @@ function oturumBitti() {
     kartOnYuz.textContent = "Oturum Tamamlandı";
     if (kartArkaYuz) kartArkaYuz.textContent = "Sonuçlar ekranda.";
     
-    // --- İstatistikleri ve Geçmişi Kaydetme İşlemleri ---
+    // --- 3. İSTATİSTİKLERİ VE GEÇMİŞ TABLOSUNU KAYDETME ---
     if (!appVeri.istatistikler) {
         appVeri.istatistikler = { seriGunu: 0, gunlukHedef: 20, bugunCalisilan: 0, sonCalismaTarihi: null };
     }
@@ -643,9 +657,8 @@ function oturumBitti() {
         appVeri.istatistikler.calismaGecmisi = {}; 
     }
 
-    // YENİ EKLENEN: Sadece toplam sayıyı değil, doğru/yanlış sayılarını da obje olarak kaydediyoruz
+    // Doğru, Yanlış ve Toplam sayılarını tabloya gidecek şekilde nesne olarak kaydet
     if (appVeri.istatistikler.calismaGecmisi[bugun]) {
-        // Eski kaydı güncelle (eğer önceden sadece sayı olarak kaydedildiyse hata vermemesi için nesneye çeviriyoruz)
         if (typeof appVeri.istatistikler.calismaGecmisi[bugun] === 'number') {
             appVeri.istatistikler.calismaGecmisi[bugun] = {
                 toplam: appVeri.istatistikler.calismaGecmisi[bugun] + toplamSoru,
@@ -658,7 +671,6 @@ function oturumBitti() {
             appVeri.istatistikler.calismaGecmisi[bugun].yanlis += oturumYanlis;
         }
     } else {
-        // İlk defa kaydediliyorsa doğrudan nesne olarak yaz
         appVeri.istatistikler.calismaGecmisi[bugun] = {
             toplam: toplamSoru,
             dogru: oturumDogru,
@@ -666,6 +678,7 @@ function oturumBitti() {
         };
     }
     
+    // Seri güncellemeleri
     if(appVeri.istatistikler.sonCalismaTarihi !== bugun) {
         appVeri.istatistikler.seriGunu++;
         appVeri.istatistikler.sonCalismaTarihi = bugun;
@@ -681,39 +694,50 @@ function oturumBitti() {
 const ilerlemeSayfasi = document.getElementById('ilerleme-sayfasi');
 
 if (ilerlemeSayfasi) {
-    // 6. YENİ EKLENEN: Günlük Çalışma Geçmişini Ekrana Basma
-        // 6. Günlük Çalışma Geçmişini Ekrana Basma (Doğru/Yanlış Detaylı)
+    // 6. GÜNCELLENEN: Günlük Çalışma Geçmişi Tablosu (Tarih, Toplam, Doğru, Yanlış)
         const gecmisListesiAlani = document.getElementById('calisma-gecmisi-listesi');
         if (gecmisListesiAlani) {
             gecmisListesiAlani.innerHTML = '';
             const gecmisVerisi = appVeri.istatistikler.calismaGecmisi || {};
-            const tarihler = Object.keys(gecmisVerisi).reverse(); // En yakın günü en üstte göster
+            const tarihler = Object.keys(gecmisVerisi).reverse(); // En yeni tarih en üstte
 
             if (tarihler.length === 0) {
                 gecmisListesiAlani.innerHTML = '<p class="bos-uyari">Henüz tamamlanmış bir çalışma seansınız yok.</p>';
             } else {
+                // Tablo Başlığı (Header)
+                const tabloBaslik = document.createElement('li');
+                tabloBaslik.style.fontWeight = 'bold';
+                tabloBaslik.style.borderBottom = '2px solid var(--renk-ikincil)';
+                tabloBaslik.style.paddingBottom = '10px';
+                tabloBaslik.style.marginBottom = '10px';
+                tabloBaslik.innerHTML = `
+                    <span style="flex: 2;">Tarih</span>
+                    <span style="flex: 1; text-align: center;">Toplam</span>
+                    <span style="flex: 1; text-align: center;">Doğru</span>
+                    <span style="flex: 1; text-align: center;">Yanlış</span>
+                `;
+                gecmisListesiAlani.appendChild(tabloBaslik);
+
+                // Tablo Satırları (Veriler)
                 tarihler.forEach(tarih => {
                     const veri = gecmisVerisi[tarih];
-                    // Geçmiş veri uyumluluğu kontrolü (Eğer sadece sayıysa eski format, nesneyse yeni format)
-                    const toplam = typeof veri === 'number' ? veri : veri.toplam;
-                    
-                    // Doğru ve Yanlış etiketlerini oluştur (Yeşil D ve Kırmızı Y)
-                    const detayHtml = typeof veri !== 'number' ? `
-                        <span style="background-color: #f0fdf4; color: #166534; padding: 0.3rem 0.6rem; border-radius: 20px; font-size: 0.8rem; font-weight: bold; margin-left: 0.3rem;">${veri.dogru} D</span>
-                        <span style="background-color: #fef2f2; color: #991b1b; padding: 0.3rem 0.6rem; border-radius: 20px; font-size: 0.8rem; font-weight: bold; margin-left: 0.3rem;">${veri.yanlis} Y</span>
-                    ` : '';
+                    const toplam = typeof veri === 'number' ? veri : (veri.toplam || 0);
+                    const dogru = veri.dogru || 0;
+                    const yanlis = veri.yanlis || 0;
 
-                    gecmisListesiAlani.innerHTML += `
-                        <li style="display: flex; justify-content: space-between; align-items: center;">
-                            <span class="zor-kelime" style="font-weight: 500; color: var(--renk-metin);">${tarih}</span>
-                            <div style="display: flex; align-items: center;">
-                                <span class="zor-hata" style="background-color: #eff6ff; color: #1e40af; border-color: rgba(37, 99, 235, 0.15);">
-                                    ${toplam} Kart
-                                </span>
-                                ${detayHtml}
-                            </div>
-                        </li>
+                    const satir = document.createElement('li');
+                    satir.style.display = 'flex';
+                    satir.style.justifyContent = 'space-between';
+                    satir.style.padding = '10px 0';
+                    satir.style.borderBottom = '1px solid #e2e8f0';
+
+                    satir.innerHTML = `
+                        <span style="flex: 2; font-weight: 500;">${tarih}</span>
+                        <span style="flex: 1; text-align: center; color: #1e40af; font-weight: bold;">${toplam}</span>
+                        <span style="flex: 1; text-align: center; color: var(--renk-basari); font-weight: bold;">${dogru}</span>
+                        <span style="flex: 1; text-align: center; color: var(--renk-hata); font-weight: bold;">${yanlis}</span>
                     `;
+                    gecmisListesiAlani.appendChild(satir);
                 });
             }
         }
