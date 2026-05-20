@@ -21,7 +21,7 @@ const varsayilanVeri = {
     ],
     istatistikler: {
         seriGunu: 0,
-        gunlukHedef: 20,
+        gunlukHedef: 200,
         bugunCalisilan: 0,
         sonCalismaTarihi: null
     }
@@ -46,6 +46,11 @@ function verileriKaydet(veri) {
 
 // Uygulama verisini global bir değişkene alıyoruz ki her yerden erişebilelim
 let appVeri = verileriGetir();
+
+if (appVeri.istatistikler && appVeri.istatistikler.gunlukHedef !== 200) {
+    appVeri.istatistikler.gunlukHedef = 200;
+    verileriKaydet(appVeri);
+}
 
 // DOM (Belge Nesne Modeli) Yüklendiğinde Çalışacak Kodlar
 document.addEventListener('DOMContentLoaded', () => {
@@ -649,7 +654,7 @@ function oturumBitti() {
     
     // --- 3. İSTATİSTİKLERİ VE GEÇMİŞ TABLOSUNU KAYDETME ---
     if (!appVeri.istatistikler) {
-        appVeri.istatistikler = { seriGunu: 0, gunlukHedef: 20, bugunCalisilan: 0, sonCalismaTarihi: null };
+        appVeri.istatistikler = { seriGunu: 0, gunlukHedef: 200, bugunCalisilan: 0, sonCalismaTarihi: null };
     }
     
     const bugun = new Date().toLocaleDateString('tr-TR'); 
